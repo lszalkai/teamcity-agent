@@ -3,17 +3,15 @@ FROM jetbrains/teamcity-agent
 USER root
 
 RUN apt-get update
-
-
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
-
 RUN add-apt-repository \
    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
    $(lsb_release -cs) \
    stable"
 
 RUN apt-get update
-RUN apt-get install docker-ce docker-ce-cli containerd.io wget
+RUN apt-get -y install docker-ce docker-ce-cli containerd.io wget vim-tiny
+RUN apt-get clean
 
 RUN curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 RUN chmod +x /usr/local/bin/docker-compose
@@ -28,7 +26,7 @@ RUN tar xfvz /tmp/openjdk12.tar.gz -C /opt/java/
 RUN tar xfvz /tmp/openjdk13.tar.gz -C /opt/java/
 RUN tar xfvz /tmp/openjdk14.tar.gz -C /opt/java/
 
-RUN rm -f /tmp/openjdk*.gz
+RUN rm -f /tmp/openjdk*.tar.gz
 
 ENV JDK_11_64 /opt/java/jdk-11.0.2
 ENV JDK_12_64 /opt/java/jdk-12.0.2
@@ -43,3 +41,5 @@ RUN update-alternatives --install /usr/bin/java java ${JRE_HOME}/bin/java 1 && \
     update-alternatives --set java ${JRE_HOME}/bin/java && \
     update-alternatives --install /usr/bin/javac javac ${JAVA_HOME}/bin/javac 1 && \
     update-alternatives --set javac ${JAVA_HOME}/bin/javac
+
+ENV DOCKER_IN_DOCKER start
