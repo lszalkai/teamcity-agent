@@ -2,7 +2,7 @@ FROM jetbrains/teamcity-agent
 
 USER root
 
-ARG COMPOSE_VERSION=2.23.0
+ARG DOCKER_COMPOSE_VERSION=2.23.0
 
 ARG JDK_8_URL=https://corretto.aws/downloads/latest/amazon-corretto-8-x64-linux-jdk.tar.gz
 ARG JDK_11_URL=https://corretto.aws/downloads/latest/amazon-corretto-11-x64-linux-jdk.tar.gz
@@ -15,7 +15,7 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN curl -L "https://github.com/docker/compose/releases/download/v$COMPOSE_VERSION/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
+RUN curl -L "https://github.com/docker/compose/releases/download/v$DOCKER_COMPOSE_VERSION/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
     chmod +x /usr/local/bin/docker-compose
 
 RUN mkdir -p /opt/java/jdk-8  && curl -fsSL $JDK_8_URL | tar -xvzf - -C /opt/java/jdk-8 --strip-components=1  && \
