@@ -2,24 +2,35 @@ FROM jetbrains/teamcity-agent
 
 USER root
 
-RUN curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-RUN chmod +x /usr/local/bin/docker-compose
+ARG COMPOSE_VERSION=2.23.0
 
-RUN mkdir /opt/java/jdk-11 /opt/java/jdk-12 /opt/java/jdk-13 /opt/java/jdk-14 /opt/java/jdk-15
+ARG JDK_8_URL=https://corretto.aws/downloads/latest/amazon-corretto-8-x64-linux-jdk.tar.gz
+ARG JDK_11_URL=https://corretto.aws/downloads/latest/amazon-corretto-11-x64-linux-jdk.tar.gz
+ARG JDK_17_URL=https://corretto.aws/downloads/latest/amazon-corretto-17-x64-linux-jdk.tar.gz
+ARG JDK_21_URL=https://corretto.aws/downloads/latest/amazon-corretto-21-x64-linux-jdk.tar.gz
 
-RUN curl -fsSL https://github.com/AdoptOpenJDK/openjdk11-upstream-binaries/releases/download/jdk-11.0.9.1%2B1/OpenJDK11U-jdk_x64_linux_11.0.9.1_1.tar.gz | tar -xvzf - -C /opt/java/jdk-11 --strip-components=1 
-RUN curl -fsSL https://download.java.net/java/GA/jdk12.0.2/e482c34c86bd4bf8b56c0b35558996b9/10/GPL/openjdk-12.0.2_linux-x64_bin.tar.gz | tar -xvzf - -C /opt/java/jdk-12 --strip-components=1 
-RUN curl -fsSL https://download.java.net/java/GA/jdk13.0.2/d4173c853231432d94f001e99d882ca7/8/GPL/openjdk-13.0.2_linux-x64_bin.tar.gz | tar -xvzf - -C /opt/java/jdk-13 --strip-components=1 
-RUN curl -fsSL https://download.java.net/java/GA/jdk14.0.2/205943a0976c4ed48cb16f1043c5c647/12/GPL/openjdk-14.0.2_linux-x64_bin.tar.gz | tar -xvzf - -C /opt/java/jdk-14 --strip-components=1 
-RUN curl -fsSL https://download.java.net/java/GA/jdk15/779bf45e88a44cbd9ea6621d33e33db1/36/GPL/openjdk-15_linux-x64_bin.tar.gz | tar -xvzf - -C /opt/java/jdk-15 --strip-components=1
+
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN curl -L "https://github.com/docker/compose/releases/download/v$COMPOSE_VERSION/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
+    chmod +x /usr/local/bin/docker-compose
+
+RUN mkdir -p /opt/java/jdk-8  && curl -fsSL $JDK_8_URL | tar -xvzf - -C /opt/java/jdk-8 --strip-components=1  && \
+    mkdir /opt/java/jdk-11 && curl -fsSL $JDK_11_URL | tar -xvzf - -C /opt/java/jdk-11 --strip-components=1  && \
+    mkdir /opt/java/jdk-17 && curl -fsSL $JDK_17_URL | tar -xvzf - -C /opt/java/jdk-17 --strip-components=1  && \
+    mkdir /opt/java/jdk-21 && curl -fsSL $JDK_21_URL | tar -xvzf - -C /opt/java/jdk-21 --strip-components=1 && \
+    rm -rf *.tar.gz
+
+ENV JDK_8_64 /opt/java/jdk-8
 ENV JDK_11_64 /opt/java/jdk-11
-ENV JDK_12_64 /opt/java/jdk-12
-ENV JDK_13_64 /opt/java/jdk-13
-ENV JDK_14_64 /opt/java/jdk-14
-ENV JDK_14_64 /opt/java/jdk-15
+ENV JDK_17_64 /opt/java/jdk-17
+ENV JDK_21_64 /opt/java/jdk-21
 
-ENV JRE_HOME /opt/java/jdk-11
-ENV JAVA_HOME /opt/java/jdk-11
+ENV JRE_HOME /opt/java/jdk-21
+ENV JAVA_HOME /opt/java/jdk-21
 ENV PATH="$JAVA_HOME/bin:$PATH"
 
 RUN update-alternatives --install /usr/bin/java java ${JRE_HOME}/bin/java 1 && \
