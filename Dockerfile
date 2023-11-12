@@ -30,7 +30,6 @@ ENV JDK_17_64 /opt/java/jdk-17
 ENV JDK_21_64 /opt/java/jdk-21
 
 ENV JRE_HOME /opt/java/jdk-21
-ENV JDK_HOME /opt/java/jdk-21
 ENV JAVA_HOME /opt/java/jdk-21
 ENV PATH="$JAVA_HOME/bin:$PATH"
 
