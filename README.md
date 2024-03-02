@@ -1,7 +1,7 @@
 # teamcity-agent
 ```
-docker build . -t "lszalkai/teamcity-agent-jdk21:latest" -t "lszalkai/teamcity-agent-jdk21:<version>"
+docker build . -t "lszalkai/teamcity-agent:latest" -t "lszalkai/teamcity-agent:<version>"
 
-docker push lszalkai/teamcity-agent-jdk21:latest
+docker push lszalkai/teamcity-agent:latest
 docker push lszalkai/teamcity-agent:<version>
 ```
