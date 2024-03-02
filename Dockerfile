@@ -1,4 +1,4 @@
-FROM jetbrains/teamcity-agent:2023.11.3-linux-sudo
+FROM jetbrains/teamcity-agent:2023.11.2-linux-sudo
 
 USER root
 
