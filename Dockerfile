@@ -2,7 +2,7 @@ FROM jetbrains/teamcity-agent:2024.07.3-linux-sudo
 
 USER root
 
-ARG DOCKER_COMPOSE_VERSION=2.25.0
+ARG DOCKER_COMPOSE_VERSION=2.29.6
 
 ARG JDK_8_URL=https://corretto.aws/downloads/latest/amazon-corretto-8-x64-linux-jdk.tar.gz
 ARG JDK_11_URL=https://corretto.aws/downloads/latest/amazon-corretto-11-x64-linux-jdk.tar.gz
